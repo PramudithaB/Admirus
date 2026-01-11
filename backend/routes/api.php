@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 
+
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -33,17 +34,17 @@ Route::middleware('auth:sanctum')->group(function () {
         });
     });
     
-    // Teacher routes
-    Route::middleware('role:teacher')->group(function () {
-        Route::get('/teacher/dashboard', function () {
-            return response()->json(['message' => 'Teacher Dashboard']);
+    // Customer routes
+    Route::middleware('role:customer')->group(function () {
+        Route::get('/customer/dashboard', function () {
+            return response()->json(['message' => 'Customer Dashboard']);
         });
     });
-    
-    // Student routes
-    Route::middleware('role:student')->group(function () {
-        Route::get('/student/dashboard', function () {
-            return response()->json(['message' => 'Student Dashboard']);
+
+    // User routes
+    Route::middleware('role:user')->group(function () {
+        Route::get('/user/dashboard', function () {
+            return response()->json(['message' => 'User Dashboard']);
         });
     });
 });

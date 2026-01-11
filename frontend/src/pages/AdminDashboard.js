@@ -1,63 +1,94 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import './Dashboard.css';
+import Sidebar from '../components/Sidebar';
 
 const AdminDashboard = () => {
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
-
-  const handleLogout = async () => {
-    await logout();
-    navigate('/login');
-  };
-
   return (
-    <div className="dashboard-container">
-      <div className="dashboard-card admin-card">
-        <div className="dashboard-header">
-          <div>
-            <h1 className="dashboard-title">Admin Dashboard</h1>
-            <p className="dashboard-subtitle">Administrative Access</p>
-          </div>
-          <button onClick={handleLogout} className="logout-button">
-            Logout
-          </button>
-        </div>
+    <div style={{ display: 'flex' }}>
+      <Sidebar />
 
-        <div className="user-info">
-          <div className="user-avatar admin-avatar">A</div>
-          <div className="user-details">
-            <h2>{user?.name}</h2>
-            <p>{user?.email}</p>
-            <span className="role-badge admin-badge">{user?.role.toUpperCase()}</span>
-          </div>
-        </div>
+      <div
+        style={{
+          flex: 1,
+          padding: '30px',
+          backgroundColor: '#f5f7fb',
+          minHeight: '100vh',
+        }}
+      >
+        <h1
+          style={{
+            fontSize: '28px',
+            fontWeight: '700',
+            marginBottom: '5px',
+          }}
+        >
+          Admin Panel
+        </h1>
 
-        <div className="dashboard-content">
-          <h3>Admin Features</h3>
-          <div className="features-grid">
-            <div className="feature-card">
-              <h4>👥 Manage Users</h4>
-              <p>Add and manage teachers and students</p>
-            </div>
-            <div className="feature-card">
-              <h4>📚 Course Management</h4>
-              <p>Create and organize courses</p>
-            </div>
-            <div className="feature-card">
-              <h4>📊 Reports</h4>
-              <p>View system reports and statistics</p>
-            </div>
-            <div className="feature-card">
-              <h4>📝 Content Approval</h4>
-              <p>Review and approve content</p>
-            </div>
+        <p style={{ color: '#666', marginBottom: '30px' }}>
+          Manage system operations
+        </p>
+
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+            gap: '20px',
+          }}
+        >
+          {/* Create Pages */}
+          <div style={cardStyle}>
+            <h3>📄 Create Pages</h3>
+            <p style={textStyle}>Create and manage system pages</p>
+            <button style={buttonStyle}>Go</button>
+          </div>
+
+          {/* Apply Tasks */}
+          <div style={cardStyle}>
+            <h3>✅ Apply Tasks</h3>
+            <p style={textStyle}>Assign and track tasks</p>
+            <button style={buttonStyle}>Go</button>
+          </div>
+
+          {/* Feedbacks */}
+          <div style={cardStyle}>
+            <h3>💬 Feedbacks</h3>
+            <p style={textStyle}>View user feedback and reviews</p>
+            <button style={buttonStyle}>Go</button>
+          </div>
+
+          {/* Payments */}
+          <div style={cardStyle}>
+            <h3>💳 All Payments</h3>
+            <p style={textStyle}>Manage and view payments</p>
+            <button style={buttonStyle}>Go</button>
           </div>
         </div>
       </div>
     </div>
   );
+};
+
+// 🔹 Reusable Inline Styles
+const cardStyle = {
+  backgroundColor: '#ffffff',
+  padding: '20px',
+  borderRadius: '12px',
+  boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+};
+
+const textStyle = {
+  color: '#555',
+  fontSize: '14px',
+  marginBottom: '15px',
+};
+
+const buttonStyle = {
+  padding: '8px 16px',
+  border: 'none',
+  backgroundColor: '#4f46e5',
+  color: '#ffffff',
+  borderRadius: '6px',
+  cursor: 'pointer',
 };
 
 export default AdminDashboard;

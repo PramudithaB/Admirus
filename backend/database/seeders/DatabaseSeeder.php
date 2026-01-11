@@ -29,20 +29,20 @@ class DatabaseSeeder extends Seeder
             'role' => 'admin',
         ]);
 
-        // Create Teacher
+        // Create Customer
         User::create([
-            'name' => 'Teacher User',
-            'email' => 'teacher@lms.com',
+            'name' => 'Customer User',
+            'email' => 'customer@lms.com',
             'password' => Hash::make('password'),
-            'role' => 'teacher',
+            'role' => 'customer',
         ]);
 
-        // Create Student
+        // Create User
         User::create([
-            'name' => 'Student User',
-            'email' => 'student@lms.com',
+            'name' => 'Regular User',
+            'email' => 'user@lms.com',
             'password' => Hash::make('password'),
-            'role' => 'student',
+            'role' => 'user',
         ]);
     }
 }

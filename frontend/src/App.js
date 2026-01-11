@@ -6,6 +6,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import SuperAdminDashboard from './pages/SuperAdminDashboard';
 import TeacherDashboard from './pages/TeacherDashboard';
 import StudentDashboard from './pages/StudentDashboard';
+import AllPages from './pages/allpages';
 import ProtectedRoute from './components/ProtectedRoute';
 import './App.css';
 
@@ -15,6 +16,15 @@ function App() {
       <Router>
         <Routes>
           <Route path="/login" element={<Login />} />
+          
+          <Route 
+            path="/allpages" 
+            element={
+              <ProtectedRoute allowedRoles={['student','teacher','admin','super_admin']}>
+                <AllPages />
+              </ProtectedRoute>
+            } 
+          />
           
           <Route 
             path="/super-admin/dashboard" 
