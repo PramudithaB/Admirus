@@ -1,14 +1,18 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
-import Login from './pages/Login';
-import AdminDashboard from './pages/AdminDashboard';
-import SuperAdminDashboard from './pages/SuperAdminDashboard';
-import TeacherDashboard from './pages/TeacherDashboard';
-import StudentDashboard from './pages/StudentDashboard';
-import AllPages from './pages/allpages';
 import ProtectedRoute from './components/ProtectedRoute';
-import './App.css';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Dashboard from './pages/Dashboard';
+import Users from './pages/Users';
+import Unauthorized from './pages/Unauthorized';
+import './styles/index.css';
+import AdminDashboard from './pages/AdminDashboard';
+import CompanyDashboard from './pages/CompanyDashboard';
+import UsersList from './pages/UsersList';
+
+
 
 function App() {
   return (
@@ -16,54 +20,54 @@ function App() {
       <Router>
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/unauthorized" element={<Unauthorized />} />
           
-          <Route 
-            path="/allpages" 
+          <Route
+            path="/dashboard"
             element={
-              <ProtectedRoute allowedRoles={['student','teacher','admin','super_admin']}>
-                <AllPages />
+              <ProtectedRoute>
+                <Dashboard />
               </ProtectedRoute>
-            } 
+            }
+          />
+          <Route
+  path="/users-list"
+  element={
+    <ProtectedRoute roles={['admin', 'superadmin']}>
+      <UsersList />
+    </ProtectedRoute>
+  }
+/>
+
+          <Route
+  path="/admin-dashboard"
+  element={
+    <ProtectedRoute roles={['admin', 'superadmin']}>
+      <AdminDashboard />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/company/:id/dashboard"
+  element={
+    <ProtectedRoute roles={['admin', 'superadmin']}>
+      <CompanyDashboard />
+    </ProtectedRoute>
+  }
+/>
+
+          
+          <Route
+            path="/users"
+            element={
+              <ProtectedRoute roles={['admin', 'superadmin']}>
+                <Users />
+              </ProtectedRoute>
+            }
           />
           
-          <Route 
-            path="/super-admin/dashboard" 
-            element={
-              <ProtectedRoute allowedRoles={['super_admin']}>
-                <SuperAdminDashboard />
-              </ProtectedRoute>
-            } 
-          />
-          
-          <Route 
-            path="/admin/dashboard" 
-            element={
-              <ProtectedRoute allowedRoles={['admin', 'super_admin']}>
-                <AdminDashboard />
-              </ProtectedRoute>
-            } 
-          />
-          
-          <Route 
-            path="/teacher/dashboard" 
-            element={
-              <ProtectedRoute allowedRoles={['teacher']}>
-                <TeacherDashboard />
-              </ProtectedRoute>
-            } 
-          />
-          
-          <Route 
-            path="/student/dashboard" 
-            element={
-              <ProtectedRoute allowedRoles={['student']}>
-                <StudentDashboard />
-              </ProtectedRoute>
-            } 
-          />
-          
-          <Route path="/" element={<Navigate to="/login" replace />} />
-          <Route path="*" element={<Navigate to="/login" replace />} />
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </Router>
     </AuthProvider>
