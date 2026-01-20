@@ -76,7 +76,7 @@ return [
 
     'cookie' => env(
         'SESSION_COOKIE',
-        str_replace(' ', '_', strtolower(env('APP_NAME', 'laravel'))).'_session'
+        \Illuminate\Support\Str::slug(env('APP_NAME', 'laravel'), '_').'_session'
     ),
 
     /*
@@ -118,5 +118,7 @@ return [
     */
 
     'same_site' => 'lax',
+
+    'partitioned' => false,
 
 ];

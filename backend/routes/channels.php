@@ -1,13 +1,11 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
-| Web Routes
+| Broadcast Channels
 |--------------------------------------------------------------------------
 */
 
-Route::get('/', function () {
-    return ['Laravel' => app()->version()];
+Illuminate\Support\Facades\Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
+    return (int) $user->id === (int) $id;
 });

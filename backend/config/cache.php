@@ -18,6 +18,10 @@ return [
 
     'stores' => [
 
+        'apc' => [
+            'driver' => 'apc',
+        ],
+
         'array' => [
             'driver' => 'array',
             'serialize' => false,
@@ -81,6 +85,6 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'prefix' => env('CACHE_PREFIX', env('APP_NAME', 'laravel').'_cache_'),
+    'prefix' => env('CACHE_PREFIX', \Illuminate\Support\Str::slug(env('APP_NAME', 'laravel'), '_').'_cache_'),
 
 ];

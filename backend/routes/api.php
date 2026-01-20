@@ -1,50 +1,62 @@
 <?php
 
-use App\Http\Controllers\Api\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\CompanyController;
 
 /*
 |--------------------------------------------------------------------------
-| API Routes
+| Public Routes
 |--------------------------------------------------------------------------
 */
-
-// Public routes
-Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
 
+Route::get('/test', function () {
+    return response()->json(['message' => 'API is working!'], 200);
+});
 
-// Protected routes
+/*
+|--------------------------------------------------------------------------
+| Protected Routes (Require Sanctum Auth)
+|--------------------------------------------------------------------------
+*/
 Route::middleware('auth:sanctum')->group(function () {
+
+    // Auth
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::get('/profile', [AuthController::class, 'profile']);
-    
-    // Super Admin only routes
-    Route::middleware('role:super_admin')->group(function () {
-        Route::get('/super-admin/dashboard', function () {
-            return response()->json(['message' => 'Super Admin Dashboard']);
-        });
-    });
-    
-    // Admin and Super Admin routes
-    Route::middleware('role:admin,super_admin')->group(function () {
-        Route::get('/admin/dashboard', function () {
-            return response()->json(['message' => 'Admin Dashboard']);
-        });
-    });
-    
-    // Customer routes
-    Route::middleware('role:customer')->group(function () {
-        Route::get('/customer/dashboard', function () {
-            return response()->json(['message' => 'Customer Dashboard']);
-        });
+    Route::get('/me', [AuthController::class, 'me']);
+    Route::post('/change-password', [UserController::class, 'changePassword']);
+
+    // Users (all authenticated)
+    Route::get('/users/{id}', [UserController::class, 'show']);
+
+    // Admin + SuperAdmin
+    Route::middleware(['role:admin,superadmin'])->group(function () {
+        Route::get('/users', [UserController::class, 'index']);
+        Route::put('/users/{id}', [UserController::class, 'update']);
     });
 
-    // User routes
-    Route::middleware('role:user')->group(function () {
-        Route::get('/user/dashboard', function () {
-            return response()->json(['message' => 'User Dashboard']);
-        });
+    // SuperAdmin only
+    Route::middleware(['role:superadmin'])->group(function () {
+        Route::delete('/users/{id}', [UserController::class, 'destroy']);
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Company Routes
+    |--------------------------------------------------------------------------
+    */
+
+    // Full CRUD
+    Route::apiResource('companies', CompanyController::class);
+
+    // Analytics (ADMIN ONLY)
+    Route::middleware(['role:admin,superadmin'])->group(function () {
+        Route::get('/companies/{id}/analytics', [CompanyController::class, 'analytics']);
+        Route::get('/companies/{id}/scheduled-posts', [CompanyController::class, 'scheduledPosts']);
     });
 });
+Route::post('/companies/{id}/posts', [CompanyController::class, 'addPost']);
