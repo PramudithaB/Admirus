@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import { getMyTasks, completeTask } from "../services/taskService";
+
+import {
+  getMyTasks,
+  userStartTask,
+  userSubmitTask,
+} from "../services/taskService";
 
 export default function UserTasks() {
   const { user } = useAuth();
@@ -15,16 +20,22 @@ export default function UserTasks() {
     }
   };
 
-  // ✅ useEffect always runs — NOT inside any IF
   useEffect(() => {
     loadTasks();
   }, []);
 
-  const handleComplete = async (id) => {
-    await completeTask(id);
+  // USER ACTIONS
+  const startTask = async (id) => {
+    await userStartTask(id);
     loadTasks();
   };
 
+  const submitTask = async (id) => {
+    await userSubmitTask(id);
+    loadTasks();
+  };
+
+  // UI COLOR VARIABLES
   const lightGray = "#f8f9fa";
   const borderColor = "#dee2e6";
 
@@ -57,21 +68,57 @@ export default function UserTasks() {
                 <td style={tdStyle}>{t.company?.name}</td>
                 <td style={tdStyle}>{t.content_type}</td>
                 <td style={tdStyle}>{t.remark}</td>
+
                 <td style={tdStyle}>
-                  {t.status === "pending" ? (
-                    <span style={pendingBadge}>Pending</span>
-                  ) : (
-                    <span style={doneBadge}>Completed</span>
+                  {/* ASSIGNED */}
+                  {t.status === "assigned" && (
+                    <span style={badgeAssigned}>Assigned</span>
+                  )}
+
+                  {/* DOING */}
+                  {t.status === "doing" && (
+                    <span style={badgeDoing}>Doing</span>
+                  )}
+
+                  {/* SUBMITTED */}
+                  {t.status === "submitted" && (
+                    <span style={badgeSubmitted}>
+                      Waiting for Admin Approval
+                    </span>
+                  )}
+
+                  {/* COMPLETED */}
+                  {t.status === "completed" && (
+                    <span style={badgeCompleted}>Completed</span>
                   )}
                 </td>
+
                 <td style={tdStyle}>
-                  {t.status === "pending" && (
+                  {/* Start Task Button */}
+                  {t.status === "assigned" && (
                     <button
-                      onClick={() => handleComplete(t.id)}
-                      style={completeBtn}
+                      onClick={() => startTask(t.id)}
+                      style={btnStart}
                     >
-                      Mark Done
+                      Start Task
                     </button>
+                  )}
+
+                  {/* Submit for Approval */}
+                  {t.status === "doing" && (
+                    <button
+                      onClick={() => submitTask(t.id)}
+                      style={btnSubmit}
+                    >
+                      Send for Approval
+                    </button>
+                  )}
+
+                  {/* No action for submitted/completed */}
+                  {(t.status === "submitted" || t.status === "completed") && (
+                    <span style={{ color: "#888", fontWeight: 600 }}>
+                      —
+                    </span>
                   )}
                 </td>
               </tr>
@@ -89,6 +136,7 @@ export default function UserTasks() {
   );
 }
 
+/* STYLES */
 const thStyle = {
   padding: "15px 20px",
   fontWeight: 600,
@@ -98,10 +146,17 @@ const thStyle = {
 const tdStyle = {
   padding: "18px 20px",
   fontSize: 15,
-  color: "#212529",
 };
 
-const pendingBadge = {
+const badgeAssigned = {
+  padding: "4px 8px",
+  background: "#0d6efd33",
+  color: "#0d6efd",
+  borderRadius: 5,
+  fontWeight: 600,
+};
+
+const badgeDoing = {
   padding: "4px 8px",
   background: "#ffc10733",
   color: "#b88600",
@@ -109,7 +164,15 @@ const pendingBadge = {
   fontWeight: 600,
 };
 
-const doneBadge = {
+const badgeSubmitted = {
+  padding: "4px 8px",
+  background: "#17a2b833",
+  color: "#0b7285",
+  borderRadius: 5,
+  fontWeight: 600,
+};
+
+const badgeCompleted = {
   padding: "4px 8px",
   background: "#19875433",
   color: "#198754",
@@ -117,13 +180,22 @@ const doneBadge = {
   fontWeight: 600,
 };
 
-const completeBtn = {
+const btnStart = {
   padding: "6px 12px",
-  backgroundColor: "#198754",
+  backgroundColor: "#0d6efd",
   color: "#fff",
   border: "none",
   borderRadius: 6,
   cursor: "pointer",
   fontWeight: 600,
-  fontSize: 14,
+};
+
+const btnSubmit = {
+  padding: "6px 12px",
+  backgroundColor: "#6c63ff",
+  color: "#fff",
+  border: "none",
+  borderRadius: 6,
+  cursor: "pointer",
+  fontWeight: 600,
 };

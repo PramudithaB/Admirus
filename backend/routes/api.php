@@ -67,11 +67,23 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/users', [UserController::class, 'index']);
     Route::get('/companies', [CompanyController::class, 'index']);
 
-    Route::post('/tasks', [TaskController::class, 'store']);
-    Route::get('/tasks/admin', [TaskController::class, 'adminTasks']);
-    Route::get('/tasks/my', [TaskController::class, 'myTasks']);
-    Route::put('/tasks/{id}/complete', [TaskController::class, 'complete']);
-    Route::put('/tasks/{id}/status', [TaskController::class, 'updateStatus']);
+   // USER actions
+Route::put('/tasks/{id}/start', [TaskController::class, 'userStartTask']);
+Route::put('/tasks/{id}/submit', [TaskController::class, 'userSubmitTask']);
+
+// ADMIN actions
+Route::put('/tasks/{id}/complete', [TaskController::class, 'adminCompleteTask']);
+
+// List tasks
+Route::get('/tasks/admin', [TaskController::class, 'adminTasks']);
+Route::get('/tasks/my', [TaskController::class, 'myTasks']);
+
+// Create new task
+Route::post('/tasks', [TaskController::class, 'store']);
+
+// Admin toggle backup
+Route::put('/tasks/{id}/status', [TaskController::class, 'updateStatus']);
+
 
 });
 Route::middleware('auth:sanctum')->get('/users', function () {
