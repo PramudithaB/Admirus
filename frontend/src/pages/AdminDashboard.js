@@ -132,7 +132,12 @@ export default function AdminDashboard() {
 >
   All Users
 </div>
-          <div style={{ padding: "12px 15px", color: "#adb5bd", cursor: "pointer" }}>Settings</div>
+<div
+  style={{ padding: "12px 15px", color: "#adb5bd", cursor: "pointer" }}
+  onClick={() => navigate("/tasks")}
+>
+  Task Management
+</div>
         </nav>
         <div onClick={handleLogout} style={logoutStyle}>
           <span>Logout</span><span style={{ fontSize: "12px" }}>⏻</span>

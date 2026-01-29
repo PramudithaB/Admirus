@@ -9,17 +9,11 @@ use Illuminate\Support\Facades\DB;
 
 class CompanyController extends Controller
 {
-    // ==========================
-    // LIST ALL COMPANIES
-    // ==========================
     public function index()
     {
         return Company::all();
     }
 
-    // ==========================
-    // CREATE COMPANY
-    // ==========================
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -41,17 +35,11 @@ class CompanyController extends Controller
         return Company::create($validated);
     }
 
-    // ==========================
-    // SHOW COMPANY
-    // ==========================
     public function show($id)
     {
         return Company::findOrFail($id);
     }
 
-    // ==========================
-    // UPDATE COMPANY
-    // ==========================
     public function update(Request $request, $id)
     {
         $company = Company::findOrFail($id);
@@ -77,17 +65,14 @@ class CompanyController extends Controller
         return $company;
     }
 
-    // ==========================
-    // DELETE COMPANY
-    // ==========================
     public function destroy($id)
     {
         return Company::destroy($id);
     }
 
-    // ==========================
+    // =======================
     // ANALYTICS
-    // ==========================
+    // =======================
     public function analytics($id)
     {
         Company::findOrFail($id);
@@ -105,30 +90,40 @@ class CompanyController extends Controller
         return response()->json($analytics);
     }
 
-    // ==========================
+    // =======================
     // SCHEDULED POSTS
-    // ==========================
+    // =======================
     public function scheduledPosts($id)
     {
         Company::findOrFail($id);
 
         $posts = Post::where('company_id', $id)
+            ->whereNotNull('scheduled_date')
             ->orderBy('scheduled_date', 'ASC')
-            ->get();
+            ->get()
+            ->map(function ($post) {
+                return [
+                    'id' => $post->id,
+                    'title' => $post->title,
+                    'type' => $post->type,
+                    'scheduled_date' => $post->scheduled_date,
+                    'status' => $post->status, // FIXED
+                ];
+            });
 
         return response()->json($posts);
     }
 
-    // ==========================
+    // =======================
     // ADD POST
-    // ==========================
+    // =======================
     public function addPost(Request $request, $companyId)
     {
         $validated = $request->validate([
             'title'          => 'required|string',
             'type'           => 'required|in:photo,video',
             'scheduled_date' => 'required|date',
-            'status'         => 'required|in:scheduled,published,deleted',
+            'status'         => 'required|in:scheduled,published,delivered,deleted', // FIXED
         ]);
 
         Company::findOrFail($companyId);

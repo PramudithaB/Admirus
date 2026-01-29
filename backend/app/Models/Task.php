@@ -5,21 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Post extends Model
+class Task extends Model
 {
-    use HasFactory;
+        use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'company_id',
-        'title',
-        'type',
-        'scheduled_date',
-        'status',
+        'content_type',
+        'remark',
+        'status'
     ];
 
-    protected $casts = [
-        'scheduled_date' => 'date',
-    ];
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function company()
     {

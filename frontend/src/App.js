@@ -11,6 +11,10 @@ import './styles/index.css';
 import AdminDashboard from './pages/AdminDashboard';
 import CompanyDashboard from './pages/CompanyDashboard';
 import UsersList from './pages/UsersList';
+import TaskManagement from './pages/TaskManagement';
+import UserTasks from './pages/UserTasks';
+import Home from './pages/Home';
+
 
 
 
@@ -22,7 +26,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/unauthorized" element={<Unauthorized />} />
-          
+                    <Route path="/Home" element={<Home />} />
+
           <Route
             path="/dashboard"
             element={
@@ -48,6 +53,7 @@ function App() {
     </ProtectedRoute>
   }
 />
+   
 <Route
   path="/company/:id/dashboard"
   element={
@@ -56,6 +62,15 @@ function App() {
     </ProtectedRoute>
   }
 />
+<Route
+          path="/tasks"
+          element={
+    <ProtectedRoute roles={['admin', 'superadmin']}>
+              <TaskManagement />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/my-tasks" element={<UserTasks />} />
 
           
           <Route
