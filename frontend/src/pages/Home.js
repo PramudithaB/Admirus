@@ -3,288 +3,126 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from 'framer-motion';
 
 const AdmirusHomepage = () => {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [showReactions, setShowReactions] = useState(false);
-  const [selectedReaction, setSelectedReaction] = useState(null);
-  const [floatingEmojis, setFloatingEmojis] = useState([]);
   const [scrollY, setScrollY] = useState(0);
 
   useEffect(() => {
-    const handleMouseMove = (e) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    };
-
     const handleScroll = () => {
       setScrollY(window.scrollY);
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('scroll', handleScroll);
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
-  const reactions = [
-    { emoji: '👍', name: 'Like', color: '#6366f1' },
-    { emoji: '❤️', name: 'Love', color: '#ef4444' },
-    { emoji: '🔥', name: 'Fire', color: '#f97316' },
-    { emoji: '⚡', name: 'Bolt', color: '#eab308' },
-    { emoji: '🎯', name: 'Target', color: '#10b981' },
-    { emoji: '🚀', name: 'Rocket', color: '#8b5cf6' },
-  ];
-
-  const handleReactionClick = (reaction) => {
-    setSelectedReaction(reaction);
-    setShowReactions(false);
-    
-    const id = Date.now();
-    setFloatingEmojis(prev => [...prev, { id, emoji: reaction.emoji }]);
-    setTimeout(() => {
-      setFloatingEmojis(prev => prev.filter(e => e.id !== id));
-    }, 2000);
-  };
-
-  const reactionBarVariants = {
-    hidden: { opacity: 0, y: 10, scale: 0.8 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      scale: 1,
-      transition: {
-        type: 'spring',
-        stiffness: 500,
-        damping: 30,
-        staggerChildren: 0.05,
-      }
-    },
-    exit: { opacity: 0, y: 10, scale: 0.8, transition: { duration: 0.2 } }
-  };
-
-  const emojiVariants = {
-    hidden: { opacity: 0, y: 20, scale: 0 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      scale: 1,
-      transition: { type: 'spring', stiffness: 600, damping: 25 }
-    },
-    hover: {
-      scale: 1.5,
-      y: -8,
-      rotate: [0, -10, 10, -10, 0],
-      transition: {
-        scale: { type: 'spring', stiffness: 400, damping: 10 },
-        y: { type: 'spring', stiffness: 400, damping: 10 },
-        rotate: { duration: 0.5 }
-      }
-    },
-    tap: { scale: 1.2 }
-  };
-
-  const floatingEmojiVariants = {
-    initial: { opacity: 1, y: 0, x: 0, scale: 1, rotate: 0 },
-    animate: { 
-      opacity: 0, 
-      y: -100, 
-      x: Math.random() * 40 - 20,
-      scale: [1, 1.3, 0.8],
-      rotate: Math.random() * 360,
-      transition: { duration: 2, ease: 'easeOut' }
-    }
-  };
-
-  const ReactionButton = () => {
-    return (
-      <div style={styles.reactionContainer}>
-        <motion.div
-          style={styles.reactionTrigger}
-          onHoverStart={() => setShowReactions(true)}
-          onHoverEnd={() => setShowReactions(false)}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <motion.button
-            style={{
-              ...styles.reactionMainButton,
-              background: selectedReaction 
-                ? `linear-gradient(135deg, ${selectedReaction.color}15 0%, ${selectedReaction.color}30 100%)`
-                : 'linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)',
-              border: `2px solid ${selectedReaction ? selectedReaction.color : 'rgba(99, 102, 241, 0.3)'}`,
-            }}
-            animate={{
-              boxShadow: selectedReaction
-                ? `0 8px 32px ${selectedReaction.color}40`
-                : '0 4px 20px rgba(99, 102, 241, 0.2)',
-            }}
-          >
-            <span style={styles.reactionMainEmoji}>
-              {selectedReaction ? selectedReaction.emoji : '👍'}
-            </span>
-            <span style={{
-              ...styles.reactionMainText,
-              color: selectedReaction ? selectedReaction.color : '#6366f1'
-            }}>
-              {selectedReaction ? selectedReaction.name : 'React'}
-            </span>
-          </motion.button>
-
-          <AnimatePresence>
-            {showReactions && (
-              <motion.div
-                style={styles.reactionBar}
-                variants={reactionBarVariants}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-              >
-                {reactions.map((reaction) => (
-                  <motion.div
-                    key={reaction.name}
-                    style={styles.reactionItem}
-                    variants={emojiVariants}
-                    whileHover="hover"
-                    whileTap="tap"
-                    onClick={() => handleReactionClick(reaction)}
-                  >
-                    <div style={styles.reactionEmoji3D}>
-                      {reaction.emoji}
-                    </div>
-                    <motion.div
-                      style={styles.reactionTooltip}
-                      initial={{ opacity: 0, y: 5 }}
-                      whileHover={{ opacity: 1, y: 0 }}
-                    >
-                      {reaction.name}
-                    </motion.div>
-                  </motion.div>
-                ))}
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </motion.div>
-
-        <AnimatePresence>
-          {floatingEmojis.map(({ id, emoji }) => (
-            <motion.div
-              key={id}
-              style={styles.floatingEmoji}
-              variants={floatingEmojiVariants}
-              initial="initial"
-              animate="animate"
-              exit={{ opacity: 0 }}
-            >
-              {emoji}
-            </motion.div>
-          ))}
-        </AnimatePresence>
-      </div>
-    );
-  };
-
   const Hero = () => {
     return (
       <section style={styles.hero}>
-        {/* 3D Background Elements */}
+        {/* 3D Flowing Lines Background */}
         <div style={styles.hero3DBackground}>
-          {/* Animated Mesh Gradient */}
-          <div style={{
-            ...styles.meshGradient,
-            transform: `translate(${mousePosition.x * 0.02}px, ${mousePosition.y * 0.02}px)`
-          }} />
-          
-          {/* 3D Floating Spheres */}
-          <motion.div
-            style={{
-              ...styles.sphere3D,
-              top: '20%',
-              left: '10%',
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-              width: '400px',
-              height: '400px',
-            }}
-            animate={{
-              y: [0, -30, 0],
-              rotateY: [0, 360],
-              scale: [1, 1.1, 1],
-            }}
-            transition={{
-              duration: 8,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          />
+          <svg style={styles.flowingSVG} xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#667eea" />
+                <stop offset="50%" stopColor="#764ba2" />
+                <stop offset="100%" stopColor="#f093fb" />
+              </linearGradient>
+              <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#4facfe" />
+                <stop offset="50%" stopColor="#00f2fe" />
+                <stop offset="100%" stopColor="#43e97b" />
+              </linearGradient>
+              <linearGradient id="gradient3" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#fa709a" />
+                <stop offset="50%" stopColor="#fee140" />
+                <stop offset="100%" stopColor="#f093fb" />
+              </linearGradient>
+             
+              <filter id="glow">
+                <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+                <feMerge>
+                  <feMergeNode in="coloredBlur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
 
-          <motion.div
-            style={{
-              ...styles.sphere3D,
-              bottom: '15%',
-              right: '10%',
-              background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-              width: '300px',
-              height: '300px',
-            }}
-            animate={{
-              y: [0, 40, 0],
-              rotateX: [0, 360],
-              scale: [1, 1.15, 1],
-            }}
-            transition={{
-              duration: 10,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: 1
-            }}
-          />
-
-          <motion.div
-            style={{
-              ...styles.sphere3D,
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-              width: '250px',
-              height: '250px',
-              opacity: 0.6,
-            }}
-            animate={{
-              scale: [1, 1.2, 1],
-              rotate: [0, 180, 360],
-            }}
-            transition={{
-              duration: 12,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: 2
-            }}
-          />
-
-          {/* Glowing Particles */}
-          {[...Array(20)].map((_, i) => (
-            <motion.div
-              key={i}
-              style={{
-                ...styles.particle,
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                width: `${Math.random() * 6 + 2}px`,
-                height: `${Math.random() * 6 + 2}px`,
-              }}
-              animate={{
-                y: [0, -100, 0],
-                opacity: [0, 1, 0],
-                scale: [0, 1, 0],
-              }}
-              transition={{
-                duration: Math.random() * 5 + 3,
-                repeat: Infinity,
-                delay: Math.random() * 3,
-              }}
+            {/* Flowing Line 1 */}
+            <motion.path
+              d="M-100,200 Q200,150 400,300 T900,250 1300,400 1700,300 2100,500"
+              fill="none"
+              stroke="url(#gradient1)"
+              strokeWidth="3"
+              filter="url(#glow)"
+              initial={{ pathLength: 0, opacity: 0 }}
+              animate={{ pathLength: 1, opacity: 0.8 }}
+              transition={{ duration: 2, ease: "easeInOut" }}
             />
-          ))}
+
+            {/* Flowing Line 2 */}
+            <motion.path
+              d="M-100,400 Q300,350 500,200 T1000,450 1400,300 1800,550"
+              fill="none"
+              stroke="url(#gradient2)"
+              strokeWidth="4"
+              filter="url(#glow)"
+              initial={{ pathLength: 0, opacity: 0 }}
+              animate={{ pathLength: 1, opacity: 0.9 }}
+              transition={{ duration: 2.5, delay: 0.3, ease: "easeInOut" }}
+            />
+
+            {/* Flowing Line 3 */}
+            <motion.path
+              d="M-100,600 Q250,500 600,600 T1100,400 1500,650 1900,500"
+              fill="none"
+              stroke="url(#gradient3)"
+              strokeWidth="3.5"
+              filter="url(#glow)"
+              initial={{ pathLength: 0, opacity: 0 }}
+              animate={{ pathLength: 1, opacity: 0.85 }}
+              transition={{ duration: 3, delay: 0.6, ease: "easeInOut" }}
+            />
+
+            {/* Flowing Line 4 */}
+            <motion.path
+              d="M-100,100 Q400,80 700,200 T1200,150 1600,300 2000,200"
+              fill="none"
+              stroke="url(#gradient4)"
+              strokeWidth="2.5"
+              filter="url(#glow)"
+              initial={{ pathLength: 0, opacity: 0 }}
+              animate={{ pathLength: 1, opacity: 0.7 }}
+              transition={{ duration: 2.8, delay: 0.9, ease: "easeInOut" }}
+            />
+
+            {/* Additional Flowing Lines for more depth */}
+            <motion.path
+              d="M2100,300 Q1800,400 1500,250 T1000,500 600,350 200,600 -100,450"
+              fill="none"
+              stroke="url(#gradient1)"
+              strokeWidth="2"
+              filter="url(#glow)"
+              initial={{ pathLength: 0, opacity: 0 }}
+              animate={{ pathLength: 1, opacity: 0.6 }}
+              transition={{ duration: 3.5, delay: 1.2, ease: "easeInOut" }}
+            />
+
+            <motion.path
+              d="M-100,350 Q350,320 650,450 T1150,300 1550,500 1950,350"
+              fill="none"
+              stroke="url(#gradient2)"
+              strokeWidth="3"
+              filter="url(#glow)"
+              initial={{ pathLength: 0, opacity: 0 }}
+              animate={{ pathLength: 1, opacity: 0.75 }}
+              transition={{ duration: 3.2, delay: 1.5, ease: "easeInOut" }}
+            />
+          </svg>
+
+          {/* Animated gradient overlay for depth */}
+          <div style={styles.gradientOverlay} />
         </div>
 
         {/* Hero Content */}
@@ -295,7 +133,6 @@ const AdmirusHomepage = () => {
             transition={{ duration: 0.8 }}
           >
             <div style={styles.brandBadge}>
-              <span style={styles.badgeIcon}>✨</span>
               <span>Premium Digital Experience</span>
             </div>
           </motion.div>
@@ -353,15 +190,6 @@ const AdmirusHomepage = () => {
               <span>View Portfolio</span>
             </motion.button>
           </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 1 }}
-            style={{ marginTop: '40px' }}
-          >
-            <ReactionButton />
-          </motion.div>
         </div>
 
         {/* Scroll Indicator */}
@@ -380,46 +208,34 @@ const AdmirusHomepage = () => {
   const Services = () => {
     const services = [
       {
-        icon: '🎨',
         title: 'Brand Design',
         description: 'Crafting unique identities that resonate and inspire',
         gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        color: '#667eea'
       },
       {
-        icon: '💻',
         title: 'Web Development',
         description: 'Building responsive, performant digital experiences',
         gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-        color: '#f5576c'
       },
       {
-        icon: '📱',
         title: 'Mobile Apps',
         description: 'Native and cross-platform solutions that scale',
         gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-        color: '#00f2fe'
       },
       {
-        icon: '🚀',
         title: '3D & Animation',
         description: 'Immersive visual experiences that captivate',
         gradient: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
-        color: '#38f9d7'
       },
       {
-        icon: '⚡',
         title: 'Digital Strategy',
         description: 'Data-driven approaches for maximum impact',
         gradient: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
-        color: '#fa709a'
       },
       {
-        icon: '🎯',
         title: 'Marketing',
         description: 'Campaigns that convert and engage audiences',
         gradient: 'linear-gradient(135deg, #30cfd0 0%, #330867 100%)',
-        color: '#30cfd0'
       },
     ];
 
@@ -462,18 +278,10 @@ const AdmirusHomepage = () => {
                   background: service.gradient
                 }} />
                 
-                <div style={styles.serviceIcon3D}>
-                  <span style={{ fontSize: '48px' }}>{service.icon}</span>
-                </div>
-                
                 <h3 style={styles.serviceTitle3D}>{service.title}</h3>
                 <p style={styles.serviceDesc3D}>{service.description}</p>
                 
                 <div style={styles.serviceArrow}>→</div>
-                
-                <div style={{ marginTop: '20px' }}>
-                  <ReactionButton />
-                </div>
               </motion.div>
             ))}
           </div>
@@ -487,25 +295,21 @@ const AdmirusHomepage = () => {
       {
         title: 'TechVision AI',
         category: 'Brand Identity',
-        image: '🎨',
         gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
       },
       {
         title: 'NeoCommerce',
         category: 'E-Commerce Platform',
-        image: '🛍️',
         gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
       },
       {
         title: 'HealthHub Pro',
         category: 'Mobile Application',
-        image: '💊',
         gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
       },
       {
         title: 'MetaSpace',
         category: '3D Experience',
-        image: '🌐',
         gradient: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
       },
     ];
@@ -543,9 +347,7 @@ const AdmirusHomepage = () => {
                 <div style={{
                   ...styles.portfolioImage,
                   background: project.gradient
-                }}>
-                  <span style={{ fontSize: '80px' }}>{project.image}</span>
-                </div>
+                }} />
                 <div style={styles.portfolioContent}>
                   <span style={styles.portfolioCategory}>{project.category}</span>
                   <h3 style={styles.portfolioTitle}>{project.title}</h3>
@@ -586,13 +388,7 @@ const AdmirusHomepage = () => {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 whileHover={{ scale: 1.05, y: -5 }}
               >
-                <motion.div
-                  style={styles.statNumber3D}
-                  animate={{ rotateY: [0, 360] }}
-                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                >
-                  {stat.number}
-                </motion.div>
+                <div style={styles.statNumber3D}>{stat.number}</div>
                 <div style={styles.statLabel3D}>{stat.label}</div>
               </motion.div>
             ))}
@@ -678,7 +474,7 @@ const AdmirusHomepage = () => {
           
           <div style={styles.footerBottom}>
             <p>© 2026 Admirus. All rights reserved.</p>
-            <p>Designed with ❤️ for innovation</p>
+            <p>Designed with care for innovation</p>
           </div>
         </div>
       </footer>
@@ -706,95 +502,6 @@ const styles = {
     overflow: 'hidden',
   },
 
-  // Reaction Styles
-  reactionContainer: {
-    position: 'relative',
-    display: 'inline-block',
-  },
-
-  reactionTrigger: {
-    position: 'relative',
-  },
-
-  reactionMainButton: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '10px',
-    padding: '12px 28px',
-    borderRadius: '50px',
-    cursor: 'pointer',
-    fontSize: '16px',
-    fontWeight: '600',
-    transition: 'all 0.3s ease',
-    backdropFilter: 'blur(10px)',
-  },
-
-  reactionMainEmoji: {
-    fontSize: '24px',
-    filter: 'drop-shadow(0 2px 8px rgba(99, 102, 241, 0.5))',
-    transform: 'perspective(1000px)',
-    transformStyle: 'preserve-3d',
-  },
-
-  reactionMainText: {
-    fontWeight: '600',
-    fontSize: '16px',
-  },
-
-  reactionBar: {
-    position: 'absolute',
-    bottom: '100%',
-    left: '50%',
-    transform: 'translateX(-50%)',
-    marginBottom: '16px',
-    display: 'flex',
-    gap: '12px',
-    padding: '16px',
-    background: 'rgba(255, 255, 255, 0.1)',
-    backdropFilter: 'blur(20px)',
-    borderRadius: '50px',
-    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1)',
-    zIndex: 1000,
-  },
-
-  reactionItem: {
-    position: 'relative',
-    cursor: 'pointer',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  reactionEmoji3D: {
-    fontSize: '36px',
-    filter: 'drop-shadow(0 4px 12px rgba(99, 102, 241, 0.6))',
-    transform: 'translateZ(0) perspective(1000px)',
-    transformStyle: 'preserve-3d',
-  },
-
-  reactionTooltip: {
-    position: 'absolute',
-    bottom: '-35px',
-    left: '50%',
-    transform: 'translateX(-50%)',
-    background: 'rgba(0, 0, 0, 0.9)',
-    color: 'white',
-    padding: '6px 14px',
-    borderRadius: '8px',
-    fontSize: '12px',
-    fontWeight: '600',
-    whiteSpace: 'nowrap',
-    pointerEvents: 'none',
-  },
-
-  floatingEmoji: {
-    position: 'fixed',
-    fontSize: '52px',
-    pointerEvents: 'none',
-    zIndex: 9999,
-    filter: 'drop-shadow(0 4px 16px rgba(99, 102, 241, 0.8))',
-  },
-
   // Hero Section
   hero: {
     minHeight: '100vh',
@@ -803,7 +510,7 @@ const styles = {
     justifyContent: 'center',
     position: 'relative',
     overflow: 'hidden',
-    background: 'radial-gradient(ellipse at top, #1a1a2e 0%, #0a0a0f 100%)',
+    background: '#000000',
   },
 
   hero3DBackground: {
@@ -814,33 +521,23 @@ const styles = {
     zIndex: 1,
   },
 
-  meshGradient: {
+  flowingSVG: {
     position: 'absolute',
-    width: '150%',
-    height: '150%',
-    top: '-25%',
-    left: '-25%',
+    width: '100%',
+    height: '100%',
+    top: 0,
+    left: 0,
+  },
+
+  gradientOverlay: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
     background: `
-      radial-gradient(at 20% 30%, rgba(99, 102, 241, 0.3) 0%, transparent 50%),
-      radial-gradient(at 80% 70%, rgba(139, 92, 246, 0.3) 0%, transparent 50%),
-      radial-gradient(at 50% 50%, rgba(236, 72, 153, 0.2) 0%, transparent 50%)
+      radial-gradient(ellipse at 20% 30%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 70%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, rgba(236, 72, 153, 0.1) 0%, transparent 50%)
     `,
-    filter: 'blur(60px)',
-    opacity: 0.8,
-  },
-
-  sphere3D: {
-    position: 'absolute',
-    borderRadius: '50%',
-    filter: 'blur(2px)',
-    boxShadow: '0 20px 80px rgba(99, 102, 241, 0.5), inset 0 0 50px rgba(255, 255, 255, 0.1)',
-    transformStyle: 'preserve-3d',
-  },
-
-  particle: {
-    position: 'absolute',
-    borderRadius: '50%',
-    background: 'radial-gradient(circle, rgba(99, 102, 241, 1) 0%, transparent 70%)',
     pointerEvents: 'none',
   },
 
@@ -867,10 +564,6 @@ const styles = {
     marginBottom: '40px',
   },
 
-  badgeIcon: {
-    fontSize: '18px',
-  },
-
   heroTitle: {
     fontSize: '140px',
     fontWeight: '900',
@@ -885,7 +578,6 @@ const styles = {
     WebkitBackgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
     backgroundClip: 'text',
-    textShadow: '0 0 80px rgba(99, 102, 241, 0.5)',
     filter: 'drop-shadow(0 0 20px rgba(99, 102, 241, 0.8))',
   },
 
@@ -1064,11 +756,6 @@ const styles = {
     pointerEvents: 'none',
   },
 
-  serviceIcon3D: {
-    marginBottom: '30px',
-    filter: 'drop-shadow(0 4px 20px rgba(99, 102, 241, 0.5))',
-  },
-
   serviceTitle3D: {
     fontSize: '28px',
     fontWeight: '800',
@@ -1189,7 +876,6 @@ const styles = {
     WebkitTextFillColor: 'transparent',
     backgroundClip: 'text',
     marginBottom: '16px',
-    transformStyle: 'preserve-3d',
   },
 
   statLabel3D: {
@@ -1323,7 +1009,7 @@ const styles = {
   },
 };
 
-// Add keyframes
+// Add keyframes and styles
 const styleSheet = document.createElement('style');
 styleSheet.textContent = `
   @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700;900&display=swap');
@@ -1340,12 +1026,18 @@ styleSheet.textContent = `
     color: #fff;
   }
 
+  @keyframes flowAnimation {
+    0% {
+      stroke-dashoffset: 1000;
+    }
+    100% {
+      stroke-dashoffset: 0;
+    }
+  }
+
   @media (max-width: 768px) {
     h1 { font-size: 56px !important; }
     h2 { font-size: 36px !important; }
-    .servicesGrid, .portfolioGrid, .statsGrid {
-      grid-template-columns: 1fr !important;
-    }
   }
 `;
 document.head.appendChild(styleSheet);

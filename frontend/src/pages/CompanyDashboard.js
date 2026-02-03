@@ -164,7 +164,7 @@ function CompanyDashboard() {
           borderRadius: 12,
           marginBottom: 40
         }}>
-          <h2>Schedule New Content</h2>
+<h2 style={{ color: "black" }}>Schedule New Content</h2>
 
           <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr auto", gap: 12 }}>
             
