@@ -91,8 +91,18 @@ const Register = () => {
       <div style={blobStyle}></div>
       
       <div style={cardStyle}>
-        <div style={logoBadge}>G</div>
-        <h2 style={titleStyle}>Create Account</h2>
+<div style={logoBadge}>
+  <img 
+    src="/admirus.jpeg" 
+    alt="Admirus Logo" 
+    style={{
+      width: "100%",
+      height: "100%",
+      objectFit: "cover",
+      borderRadius: "0%"
+    }}
+  />
+</div>        <h2 style={titleStyle}>Create Account</h2>
         <p style={subtitleStyle}>Join us to start managing your projects.</p>
 
         <form onSubmit={handleSubmit}>

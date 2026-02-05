@@ -38,7 +38,18 @@ const Login = () => {
 
       <div style={cardStyle}>
         <div style={{ textAlign: 'center', marginBottom: 35 }}>
-          <div style={logoBadge}>A</div>
+<div style={logoBadge}>
+  <img 
+    src="/admirus.jpeg" 
+    alt="Admirus Logo" 
+    style={{
+      width: "100%",
+      height: "100%",
+      objectFit: "cover",
+      borderRadius: "0%"
+    }}
+  />
+</div>
           <h2 style={titleStyle}>Welcome Back</h2>
           <p style={subtitleStyle}>Enter your credentials to access your account</p>
         </div>
