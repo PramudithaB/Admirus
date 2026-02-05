@@ -83,6 +83,7 @@ Route::post('/tasks', [TaskController::class, 'store']);
 
 // Admin toggle backup
 Route::put('/tasks/{id}/status', [TaskController::class, 'updateStatus']);
+Route::put('/posts/{id}/status', [CompanyController::class, 'updateStatus']);
 
 
 });

@@ -6,3 +6,5 @@ export const getScheduledPosts = (id) => api.get(`/companies/${id}/scheduled-pos
 export const addPost = async (companyId, data) => {
   return api.post(`/companies/${companyId}/posts`, data);
 };
+export const updatePostStatus = (postId, status) =>
+  api.put(`/posts/${postId}/status`, { status });

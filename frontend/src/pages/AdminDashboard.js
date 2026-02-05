@@ -199,7 +199,7 @@ export default function AdminDashboard() {
                   <td style={{ ...tdStyle, textAlign: "right" }}>
                     <button onClick={() => navigate(`/company/${c.id}/dashboard`)} style={actionBtn("#0d6efd")}>View</button>
                     <button onClick={() => handleEdit(c)} style={actionBtn("#ffc107")}>Edit</button>
-                    <button onClick={() => handleDelete(c.id)} style={actionBtn("#dc3545", true)}>Delete</button>
+                    {/* <button onClick={() => handleDelete(c.id)} style={actionBtn("#dc3545", true)}>Delete</button> */}
                   </td>
                 </tr>
               ))}

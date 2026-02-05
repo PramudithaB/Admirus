@@ -4,6 +4,8 @@ import { Line } from 'react-chartjs-2';
 
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import { updatePostStatus } from "../services/companyDashboardService";
+
 
 import {
   Chart as ChartJS,
@@ -46,6 +48,15 @@ function CompanyDashboard() {
     setAnalytics((await getAnalytics(companyId)).data);
     setPosts((await getScheduledPosts(companyId)).data);
   };
+const changeStatus = async (postId, newStatus) => {
+  try {
+    await updatePostStatus(postId, newStatus);
+    loadAllDashboardData(); // reload table
+  } catch (error) {
+    console.error("Status update failed:", error);
+    alert("Failed to update status");
+  }
+};
 
   useEffect(() => {
     loadAllDashboardData();
@@ -288,7 +299,23 @@ function CompanyDashboard() {
                     <td style={tdStyle}>{p.title}</td>
                     <td style={tdStyle}>{p.type}</td>
                     <td style={tdStyle}>{p.scheduled_date}</td>
-                    <td style={tdStyle}>{p.status}</td>
+<td style={tdStyle}>
+  <select
+    value={p.status}
+    onChange={(e) => changeStatus(p.id, e.target.value)}
+    style={{
+      padding: "6px 10px",
+      borderRadius: 6,
+      border: "1px solid #ced4da",
+      fontWeight: 600,
+      cursor: "pointer"
+    }}
+  >
+    <option value="scheduled">Scheduled</option>
+    <option value="published">Published</option>
+    <option value="delivered">Delivered</option>
+  </select>
+</td>
                   </tr>
                 ))}
               </tbody>

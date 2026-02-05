@@ -138,4 +138,17 @@ class CompanyController extends Controller
 
         return response()->json($post, 201);
     }
+    public function updateStatus(Request $request, $id)
+{
+    $request->validate([
+        'status' => 'required|in:scheduled,published,delivered'
+    ]);
+
+    $post = Post::findOrFail($id);
+    $post->status = $request->status;
+    $post->save();
+
+    return response()->json($post);
+}
+
 }
