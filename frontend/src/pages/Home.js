@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";   // ✅ FIXED
 import { motion, AnimatePresence } from 'framer-motion';
 
 const AdmirusHomepage = () => {
   const [scrollY, setScrollY] = useState(0);
+  const navigate = useNavigate();   // ✅ FIXED
 
   useEffect(() => {
     const handleScroll = () => {
@@ -15,6 +16,8 @@ const AdmirusHomepage = () => {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
+  }, []);
+  useEffect(() => {
   }, []);
 
   const Hero = () => {
@@ -187,7 +190,12 @@ const AdmirusHomepage = () => {
               whileHover={{ scale: 1.05, y: -5 }}
               whileTap={{ scale: 0.95 }}
             >
-              <span>View Portfolio</span>
+<span 
+  
+  onClick={() => navigate("/login")}
+>
+  Login
+</span>
             </motion.button>
           </motion.div>
         </div>
