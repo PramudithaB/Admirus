@@ -55,7 +55,6 @@ export default function TaskManagement() {
   // FILTER LOGIC: Get tasks for specific user AND specific month
   const filteredTasks = tasks.filter((task) => {
     const matchesUser = task.user_id?.toString() === selectedUserId?.toString();
-    // Assuming task.created_at exists (e.g., "2023-10-25T...")
     const matchesMonth = task.created_at ? task.created_at.startsWith(selectedMonth) : true;
     return matchesUser && matchesMonth;
   });
@@ -135,9 +134,8 @@ export default function TaskManagement() {
           AdminPanel
         </h2>
         <div onClick={() => navigate("/admin-dashboard")} style={sideLink}>Dashboard</div>
-        <div onClick={() => navigate("/users")} style={sideLink}>All Users</div>
+        {/* <div onClick={() => navigate("/users")} style={sideLink}>All Users</div> */}
         
-        {/* TASK MANAGEMENT DROPDOWN */}
         <div 
           style={{ position: "relative" }} 
           onMouseEnter={() => setIsDropdownOpen(true)}
@@ -219,7 +217,7 @@ export default function TaskManagement() {
                   value={selectedMonth} 
                   onChange={(e) => setSelectedMonth(e.target.value)} 
                 />
-                <button onClick={downloadPDF} style={pdfBtn}>Download PDF Report</button>
+                {/* <button onClick={downloadPDF} style={pdfBtn}>Download PDF Report</button> */}
               </div>
             </div>
 
@@ -252,7 +250,7 @@ export default function TaskManagement() {
                           )}
                           {task.status !== "doing" && task.status !== "submitted" && (
                             <button onClick={() => toggleStatus(task)} style={toggleBtn}>
-                              {task.status === "assigned" ? "Finish" : "Reset"}
+                              {task.status === "assigned" ? "Finish" : "Diliver to Post"}
                             </button>
                           )}
                         </td>
@@ -260,7 +258,7 @@ export default function TaskManagement() {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="5" style={{ padding: 40, textAlign: "center", color: "#888" }}>
+                      <td colSpan="5" style={{ padding: 40, textAlign: "center", color: "#000" }}>
                         No tasks found for this month.
                       </td>
                     </tr>
@@ -336,15 +334,14 @@ const pdfBtn = {
   borderRadius: 6, border: "none", cursor: "pointer", fontWeight: 600
 };
 
-const thStyle = { padding: "15px 20px", fontSize: 14, fontWeight: 600, textAlign: "left" };
-const tdStyle = { padding: "18px 20px", fontSize: 15 };
+const thStyle = { padding: "15px 20px", fontSize: 14, fontWeight: 600, textAlign: "left", color: "#000" };
+const tdStyle = { padding: "18px 20px", fontSize: 15, color: "#000" }; // Set to Black
 
 const toggleBtn = {
   padding: "6px 14px", backgroundColor: "#6c63ff", color: "#fff",
   borderRadius: 6, border: "none", cursor: "pointer", fontSize: 13
 };
 
-// Helper for dynamic colors
 const getBadgeStyle = (status) => {
   const styles = {
     assigned: { background: "#0d6efd33", color: "#0d6efd" },

@@ -15,19 +15,21 @@ import TaskManagement from './pages/TaskManagement';
 import UserTasks from './pages/UserTasks';
 import Home from './pages/Home';
 
-
-
-
 function App() {
   return (
     <AuthProvider>
       <Router>
         <Routes>
+
+          {/* Public Routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/unauthorized" element={<Unauthorized />} />
-                    <Route path="/Home" element={<Home />} />
 
+          {/* Homepage */}
+          <Route path="/home" element={<Home />} />
+
+          {/* Protected Routes */}
           <Route
             path="/dashboard"
             element={
@@ -36,43 +38,45 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route
-  path="/users-list"
-  element={
-    <ProtectedRoute roles={['admin', 'superadmin']}>
-      <UsersList />
-    </ProtectedRoute>
-  }
-/>
 
           <Route
-  path="/admin-dashboard"
-  element={
-    <ProtectedRoute roles={['admin', 'superadmin']}>
-      <AdminDashboard />
-    </ProtectedRoute>
-  }
-/>
-   
-<Route
-  path="/company/:id/dashboard"
-  element={
-    <ProtectedRoute roles={['admin', 'superadmin']}>
-      <CompanyDashboard />
-    </ProtectedRoute>
-  }
-/>
-<Route
-          path="/tasks"
-          element={
-    <ProtectedRoute roles={['admin', 'superadmin']}>
-              <TaskManagement />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="/my-tasks" element={<UserTasks />} />
+            path="/users-list"
+            element={
+              <ProtectedRoute roles={['admin', 'superadmin']}>
+                <UsersList />
+              </ProtectedRoute>
+            }
+          />
 
-          
+          <Route
+            path="/admin-dashboard"
+            element={
+              <ProtectedRoute roles={['admin', 'superadmin']}>
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/company/:id/dashboard"
+            element={
+              <ProtectedRoute roles={['admin', 'superadmin']}>
+                <CompanyDashboard />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/tasks"
+            element={
+              <ProtectedRoute roles={['admin', 'superadmin']}>
+                <TaskManagement />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route path="/my-tasks" element={<UserTasks />} />
+
           <Route
             path="/users"
             element={
@@ -81,8 +85,10 @@ function App() {
               </ProtectedRoute>
             }
           />
-          
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+
+          {/* Redirect root path "/" → "/home" */}
+          <Route path="/" element={<Navigate to="/home" replace />} />
+
         </Routes>
       </Router>
     </AuthProvider>

@@ -138,7 +138,7 @@ const changeStatus = async (postId, newStatus) => {
         </h2>
 
         <div
-          onClick={() => navigate('/')}
+          onClick={() => navigate('/admin-dashboard')}
           style={{ color: "#adb5bd", padding: "12px 15px", cursor: "pointer" }}
         >
           ← Back to Companies
@@ -240,7 +240,7 @@ const changeStatus = async (postId, newStatus) => {
                 cursor: "pointer"
               }}
             >
-              Schedule
+              Confirm
             </button>
           </div>
         </div>

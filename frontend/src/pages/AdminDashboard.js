@@ -156,7 +156,7 @@ export default function AdminDashboard() {
 
         {/* Summary Cards */}
         <div style={{ display: "flex", gap: 20, marginBottom: 40 }}>
-          {[{ label: "Total Clients", value: totalCompanies }, { label: "Total Posts", value: totalPosts }, { label: "Total Videos", value: totalVideos }].map((item, index) => (
+          {[{ label: "Total Clients", value: totalCompanies }].map((item, index) => (
             <div key={index} style={cardStyle(borderColor)}>
               <p style={{ color: "#6c757d", fontSize: 13, textTransform: "uppercase", fontWeight: "700", marginBottom: 8 }}>{item.label}</p>
               <p style={{ fontSize: 28, fontWeight: "bold", margin: 0, color: "#1a1d23" }}>{item.value}</p>
