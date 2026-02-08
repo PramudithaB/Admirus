@@ -9,5 +9,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return ['Laravel' => app()->version()];
+    return file_get_contents(public_path('../dist/index.html'));
 });
+
+Route::get('/{path}', function () {
+    return file_get_contents(public_path('../dist/index.html'));
+})->where('path', '.*');
