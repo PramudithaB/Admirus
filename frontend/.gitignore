@@ -7,7 +7,7 @@
 /coverage
 
 # production
-/build
+# /build - Build files are committed for deployment to backend/public
 
 # misc
 .DS_Store

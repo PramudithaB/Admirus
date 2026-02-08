@@ -1,14 +1,46 @@
+# Laravel Dependencies
 /vendor/
 /node_modules/
+
+# Laravel Public Directory
 /public/hot
 /public/storage
+
+# Laravel Storage
 /storage/*.key
+/storage/logs/*.log
+
+# Environment Configuration
 .env
 .env.backup
+.env.testing
+
+# Testing
 .phpunit.result.cache
+phpunit.xml
+
+# Laravel IDE Helper
+_ide_helper.php
+_ide_helper_models.php
+.phpstorm.meta.php
+
+# Homestead
 Homestead.json
 Homestead.yaml
+
+# NPM & Yarn
 npm-debug.log
 yarn-error.log
+
+# IDE
 /.idea
 /.vscode
+
+# Mac
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Composer
+composer.phar
