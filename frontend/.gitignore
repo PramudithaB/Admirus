@@ -16,6 +16,8 @@
 .env.test.local
 .env.production.local
 
+# Note: .env and .env.production ARE tracked for deployment
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
