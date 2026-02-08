@@ -19,24 +19,32 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
+      console.log('Attempting login:', { email });
       const response = await api.post('/login', { email, password });
       const { user, access_token } = response.data;
       
+      console.log('Login successful:', { user });
       localStorage.setItem('token', access_token);
       localStorage.setItem('user', JSON.stringify(user));
       setUser(user);
       
       return { success: true, user };
     } catch (error) {
+      console.error('Login error:', error.response || error);
+      const errorMessage = error.response?.data?.message 
+        || error.response?.data?.errors 
+        || 'Login failed. Please check your credentials.';
+      
       return {
         success: false,
-        message: error.response?.data?.message || 'Login failed',
+        message: typeof errorMessage === 'string' ? errorMessage : JSON.stringify(errorMessage),
       };
     }
   };
 
   const register = async (name, email, password, password_confirmation) => {
     try {
+      console.log('Attempting registration:', { name, email });
       const response = await api.post('/register', {
         name,
         email,
@@ -45,15 +53,31 @@ export const AuthProvider = ({ children }) => {
       });
       const { user, access_token } = response.data;
       
+      console.log('Registration successful:', { user });
       localStorage.setItem('token', access_token);
       localStorage.setItem('user', JSON.stringify(user));
       setUser(user);
       
       return { success: true, user };
     } catch (error) {
+      console.error('Registration error:', error.response || error);
+      const errorMessage = error.response?.data?.message 
+        || error.response?.data?.errors 
+        || 'Registration failed. Please try again.';
+      
+      // If validation errors, format them
+      if (error.response?.data?.errors) {
+        const errors = error.response.data.errors;
+        const errorList = Object.values(errors).flat().join(', ');
+        return {
+          success: false,
+          message: errorList,
+        };
+      }
+      
       return {
         success: false,
-        message: error.response?.data?.message || 'Registration failed',
+        message: typeof errorMessage === 'string' ? errorMessage : JSON.stringify(errorMessage),
       };
     }
   };

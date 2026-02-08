@@ -59,35 +59,30 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/companies/{id}/analytics', [CompanyController::class, 'analytics']);
         Route::get('/companies/{id}/scheduled-posts', [CompanyController::class, 'scheduledPosts']);
     });
-});
-Route::post('/companies/{id}/posts', [CompanyController::class, 'addPost']);
 
+    // Posts (authenticated)
+    Route::post('/companies/{id}/posts', [CompanyController::class, 'addPost']);
+    Route::put('/posts/{id}/status', [CompanyController::class, 'updateStatus']);
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/users', [UserController::class, 'index']);
-    Route::get('/companies', [CompanyController::class, 'index']);
+    /*
+    |--------------------------------------------------------------------------
+    | Task Routes
+    |--------------------------------------------------------------------------
+    */
 
-   // USER actions
-Route::put('/tasks/{id}/start', [TaskController::class, 'userStartTask']);
-Route::put('/tasks/{id}/submit', [TaskController::class, 'userSubmitTask']);
+    // USER actions
+    Route::put('/tasks/{id}/start', [TaskController::class, 'userStartTask']);
+    Route::put('/tasks/{id}/submit', [TaskController::class, 'userSubmitTask']);
 
-// ADMIN actions
-Route::put('/tasks/{id}/complete', [TaskController::class, 'adminCompleteTask']);
+    // ADMIN actions
+    Route::put('/tasks/{id}/complete', [TaskController::class, 'adminCompleteTask']);
+    Route::put('/tasks/{id}/status', [TaskController::class, 'updateStatus']);
 
-// List tasks
-Route::get('/tasks/admin', [TaskController::class, 'adminTasks']);
-Route::get('/tasks/my', [TaskController::class, 'myTasks']);
+    // List tasks
+    Route::get('/tasks/admin', [TaskController::class, 'adminTasks']);
+    Route::get('/tasks/my', [TaskController::class, 'myTasks']);
 
-// Create new task
-Route::post('/tasks', [TaskController::class, 'store']);
-
-// Admin toggle backup
-Route::put('/tasks/{id}/status', [TaskController::class, 'updateStatus']);
-Route::put('/posts/{id}/status', [CompanyController::class, 'updateStatus']);
-
-
-});
-Route::middleware('auth:sanctum')->get('/users', function () {
-    return \App\Models\User::select('id', 'name')->get();
+    // Create new task
+    Route::post('/tasks', [TaskController::class, 'store']);
 });
 
