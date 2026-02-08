@@ -19,6 +19,64 @@ Route::get('/test', function () {
     return response()->json(['message' => 'API is working!'], 200);
 });
 
+// Debug endpoint - remove this in production
+Route::get('/debug-db', function () {
+    try {
+        $pdo = DB::connection()->getPdo();
+        $usersCount = DB::table('users')->count();
+        $dbName = DB::connection()->getDatabaseName();
+        
+        return response()->json([
+            'status' => 'success',
+            'database' => $dbName,
+            'users_count' => $usersCount,
+            'connection' => 'OK',
+            'driver' => config('database.default'),
+            'host' => config('database.connections.mysql.host'),
+        ], 200);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => $e->getMessage(),
+            'trace' => $e->getTraceAsString(),
+        ], 500);
+    }
+});
+
+// Test registration without authentication - DEBUGGING ONLY
+Route::post('/test-register', function (Illuminate\Http\Request $request) {
+    try {
+        \Log::info('Test registration attempt', $request->all());
+        
+        // Test database write
+        $user = \App\Models\User::create([
+            'name' => 'Debug Test User ' . time(),
+            'email' => 'debug' . time() . '@test.com',
+            'password' => \Hash::make('password123'),
+            'role' => 'user',
+            'is_active' => true,
+        ]);
+        
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Test user created successfully!',
+            'user' => $user,
+            'database' => DB::connection()->getDatabaseName(),
+        ], 201);
+    } catch (\Exception $e) {
+        \Log::error('Test registration failed', [
+            'error' => $e->getMessage(),
+            'trace' => $e->getTraceAsString(),
+        ]);
+        return response()->json([
+            'status' => 'error',
+            'message' => $e->getMessage(),
+            'line' => $e->getLine(),
+            'file' => $e->getFile(),
+        ], 500);
+    }
+});
+
 /*
 |--------------------------------------------------------------------------
 | Protected Routes (Require Sanctum Auth)

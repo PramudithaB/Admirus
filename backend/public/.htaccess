@@ -9,22 +9,26 @@
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
+    # Force API requests to index.php FIRST (before any other rules)
+    RewriteCond %{REQUEST_URI} ^/api
+    RewriteRule ^(.*)$ index.php [QSA,L]
+
     # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
 
-    # Send API Requests To Laravel Front Controller (index.php)
-    RewriteCond %{REQUEST_URI} ^/api/
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^ index.php [L]
-
-    # If Actual File or Directory Exists → Serve It
+    # Serve existing files and directories directly
     RewriteCond %{REQUEST_FILENAME} -f [OR]
     RewriteCond %{REQUEST_FILENAME} -d
     RewriteRule ^ - [L]
 
-    # All Non-API, Non-Existent Files → React index.html
+    # Try Laravel first for non-existent files, then fall back to React
+    RewriteCond %{REQUEST_URI} !^/static/
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^api/ index.php [L]
+    
+    # Everything else → React index.html
     RewriteRule ^ index.html [L]
 </IfModule>
