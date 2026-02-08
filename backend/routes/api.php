@@ -2,6 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CompanyController;
@@ -44,15 +47,15 @@ Route::get('/debug-db', function () {
 });
 
 // Test registration without authentication - DEBUGGING ONLY
-Route::post('/test-register', function (Illuminate\Http\Request $request) {
+Route::post('/test-register', function (Request $request) {
     try {
-        \Log::info('Test registration attempt', $request->all());
+        Log::info('Test registration attempt', $request->all());
         
         // Test database write
         $user = \App\Models\User::create([
             'name' => 'Debug Test User ' . time(),
             'email' => 'debug' . time() . '@test.com',
-            'password' => \Hash::make('password123'),
+            'password' => Hash::make('password123'),
             'role' => 'user',
             'is_active' => true,
         ]);
@@ -64,7 +67,7 @@ Route::post('/test-register', function (Illuminate\Http\Request $request) {
             'database' => DB::connection()->getDatabaseName(),
         ], 201);
     } catch (\Exception $e) {
-        \Log::error('Test registration failed', [
+        Log::error('Test registration failed', [
             'error' => $e->getMessage(),
             'trace' => $e->getTraceAsString(),
         ]);
