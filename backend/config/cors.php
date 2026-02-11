@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Cross-Origin Resource Sharing (CORS) Configuration
@@ -12,7 +11,11 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => array_filter(array_map('trim', explode(',', env('CORS_ALLOWED_ORIGINS', 'http://localhost:3000')))),
+    'allowed_origins' => [
+        'http://localhost:3000',
+        'https://admirus.com.lk',
+        'https://www.admirus.com.lk',
+    ],
 
     'allowed_origins_patterns' => [],
 
@@ -23,5 +26,4 @@ return [
     'max_age' => 0,
 
     'supports_credentials' => true,
-
 ];

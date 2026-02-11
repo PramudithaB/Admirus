@@ -82,8 +82,9 @@ Make sure these are in your Hostinger .env file:
 ```env
 APP_ENV=production
 APP_DEBUG=false
+APP_URL=https://admirus.com.lk
 SESSION_SECURE_COOKIE=true
-CORS_ALLOWED_ORIGINS=https://admirus.com.lk,https://www.admirus.com.lk
+CORS_ALLOWED_ORIGINS=http://localhost:3000,https://admirus.com.lk,https://www.admirus.com.lk
 SANCTUM_STATEFUL_DOMAINS=admirus.com.lk,www.admirus.com.lk
 SESSION_DOMAIN=.admirus.com.lk
 ```

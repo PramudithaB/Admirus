@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://admirus.com.lk/api', // Laravel API URL
+  baseURL: 'https://admirus.com.lk/backend/public/api',
   withCredentials: true,
 });
 

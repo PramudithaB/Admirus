@@ -1,6 +1,7 @@
 # API Documentation
 
-Base URL: `http://localhost:8000/api`
+**Production**: `https://admirus.com.lk/backend/public/api`
+**Local**: `http://localhost:8000/api`
 
 ## Authentication
 
@@ -341,12 +342,9 @@ Default Laravel rate limiting:
 
 ## CORS Configuration
 
-Allowed origins: `http://localhost:3000`
+Allowed origins:
+- `http://localhost:3000` (local development)
+- `https://admirus.com.lk` (production)
+- `https://www.admirus.com.lk` (production with www)
 
-To add more origins, edit `config/cors.php`:
-```php
-'allowed_origins' => [
-    'http://localhost:3000',
-    'https://yourdomain.com'
-],
-```
+To add more origins, edit `config/cors.php` and your `.env` file.
