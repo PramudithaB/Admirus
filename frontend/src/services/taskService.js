@@ -1,6 +1,18 @@
-import axios from "./axios";
-import api from "./api";
+import axios from 'axios';
 
+const api = axios.create({
+  baseURL: 'https://admirus.com.lk/backend/public/api',
+  withCredentials: true,
+});
+
+// Add token to requests
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
 export const getUsers = () => axios.get("/users");
 export const getCompanies = () => axios.get("/companies");
