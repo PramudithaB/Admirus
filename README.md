@@ -88,11 +88,14 @@ After running the seeder, you can login with:
 
 ## API Endpoints
 
+**Production**: `https://admirus.com.lk/backend/public/api`
+**Local Development**: `http://localhost:8000/api`
+
 ### Public Routes
 
-- `POST /api/register` - Register new user
-- `POST /api/login` - Login user
-- `GET /api/test` - Test API connection
+- `POST /register` - Register new user
+- `POST /login` - Login user
+- `GET /test` - Test API connection
 
 ### Protected Routes (Authenticated)
 

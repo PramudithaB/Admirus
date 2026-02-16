@@ -6,16 +6,12 @@ Add these lines to your .env file on Hostinger:
 # Session Security (REQUIRED for HTTPS)
 SESSION_SECURE_COOKIE=true
 
-# Alternative Database Host (try this if database still doesn't work)
-# DB_HOST=localhost
-# (instead of DB_HOST=127.0.0.1)
+# CORS Configuration - Accept both local and production
+CORS_ALLOWED_ORIGINS=http://localhost:3000,https://admirus.com.lk,https://www.admirus.com.lk
 
 # Sanctum Configuration
 SANCTUM_STATEFUL_DOMAINS=admirus.com.lk,www.admirus.com.lk
 SESSION_DOMAIN=.admirus.com.lk
-
-# CORS Configuration
-CORS_ALLOWED_ORIGINS=https://admirus.com.lk,https://www.admirus.com.lk
 ```
 
 ## Current Issues Fixed:
@@ -89,7 +85,7 @@ VITE_PUSHER_APP_CLUSTER="${PUSHER_APP_CLUSTER}"
 
 SANCTUM_STATEFUL_DOMAINS=admirus.com.lk,www.admirus.com.lk
 SESSION_DOMAIN=.admirus.com.lk
-CORS_ALLOWED_ORIGINS=https://admirus.com.lk,https://www.admirus.com.lk
+CORS_ALLOWED_ORIGINS=http://localhost:3000,https://admirus.com.lk,https://www.admirus.com.lk
 ```
 
 ## If DB_HOST=127.0.0.1 doesn't work:

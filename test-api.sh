@@ -102,8 +102,8 @@ echo ""
 echo "=========================================="
 echo "7️⃣  Testing Live API Endpoint"
 echo "=========================================="
-echo "Testing: https://admirus.com.lk/api/test"
-curl -X GET "https://admirus.com.lk/api/test" \
+echo "Testing: https://admirus.com.lk/backend/public/api/test"
+curl -X GET "https://admirus.com.lk/backend/public/api/test" \
      -H "Content-Type: application/json" \
      -w "\nHTTP Status: %{http_code}\n" \
      2>/dev/null

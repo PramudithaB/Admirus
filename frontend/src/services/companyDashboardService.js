@@ -1,4 +1,4 @@
-import api from './api';
+import api from '../api/axios';
 
 export const getCompany = (id) => api.get(`/companies/${id}`);
 export const getAnalytics = (id) => api.get(`/companies/${id}/analytics`);
@@ -8,3 +8,5 @@ export const addPost = async (companyId, data) => {
 };
 export const updatePostStatus = (postId, status) =>
   api.put(`/posts/${postId}/status`, { status });
+
+export default api;
